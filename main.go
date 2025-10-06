@@ -16,7 +16,7 @@ import (
 	"fyne.io/fyne/v2/widget"
 )
 
-// Task — структура для одной задачи (ОБНОВЛЕНО: добавлено Priority)
+// Task — структура для одной задачи
 type Task struct {
 	ID          int    `json:"id"`
 	Description string `json:"description"`
@@ -29,7 +29,7 @@ type TodoList struct {
 	Tasks []Task `json:"tasks"`
 }
 
-// LoadTasks загружает задачи из файла (с фиксом для пустого файла)
+// LoadTasks загружает задачи из файла
 func (tl *TodoList) LoadTasks(filename string) error {
 	data, err := ioutil.ReadFile(filename)
 	if err != nil {
@@ -55,7 +55,7 @@ func (tl *TodoList) SaveTasks(filename string) error {
 	return ioutil.WriteFile(filename, data, 0644)
 }
 
-// AddTask добавляет новую задачу (ОБНОВЛЕНО: с приоритетом)
+// AddTask добавляет новую задачу
 func (tl *TodoList) AddTask(description, priority string) {
 	id := len(tl.Tasks) + 1
 	task := Task{ID: id, Description: description, Completed: false, Priority: priority}
@@ -84,7 +84,7 @@ func (tl *TodoList) DeleteTask(id int) bool {
 	return false
 }
 
-// SortByPriority сортирует задачи по приоритету (НОВОЕ: High -> Medium -> Low)
+// SortByPriority сортирует задачи по приоритету
 func (tl *TodoList) SortByPriority() {
 	priorityOrder := map[string]int{"High": 3, "Medium": 2, "Low": 1}
 	sort.Slice(tl.Tasks, func(i, j int) bool {
@@ -96,7 +96,7 @@ func (tl *TodoList) SortByPriority() {
 	})
 }
 
-// GetTasksContainer возвращает контейнер с чекбоксами для задач (ОБНОВЛЕНО: показывает приоритет)
+// GetTasksContainer возвращает контейнер с чекбоксами для задач
 func (tl *TodoList) GetTasksContainer(app *TodoApp) fyne.CanvasObject {
 	if len(tl.Tasks) == 0 {
 		return widget.NewLabel("Нет задач. Добавьте первую!")
@@ -120,7 +120,7 @@ func (tl *TodoList) GetTasksContainer(app *TodoApp) fyne.CanvasObject {
 	return vbox
 }
 
-// GUI-структура для приложения (ОБНОВЛЕНО: добавлена кнопка сортировки)
+// GUI-структура для приложения
 type TodoApp struct {
 	window    fyne.Window
 	todo      *TodoList
@@ -135,7 +135,7 @@ type TodoApp struct {
 func (a *TodoApp) refreshTasks() {
 	// Перестраиваем список задач
 	a.tasksCont = a.todo.GetTasksContainer(a)
-	// Обновляем основной контент (ОБНОВЛЕНО: добавлена кнопка сортировки)
+	// Обновляем основной контент
 	a.content = container.NewVScroll(container.NewVBox(a.tasksCont, container.NewHBox(a.addBtn, a.sortBtn, a.deleteBtn)))
 	a.window.SetContent(a.content)
 }
@@ -157,7 +157,6 @@ func main() {
 		filename: filename,
 	}
 
-	// Кнопки (ИСПРАВЛЕНО: Callback перед parent)
 	app.addBtn = widget.NewButton("Добавить задачу", func() {
 		// Выпадающий список приоритетов
 		priorities := []string{"Low", "Medium", "High"}
@@ -167,7 +166,6 @@ func main() {
 		descEntry := widget.NewEntry()
 		descEntry.SetPlaceHolder("Введите описание задачи...")
 
-		// ИСПРАВЛЕНО: Callback перед parent (myWindow)
 		dialog.ShowCustomConfirm("Новая задача", "Добавить", "Отмена", container.NewVBox(
 			widget.NewLabel("Описание:"),
 			descEntry,
