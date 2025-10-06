@@ -1,0 +1,22 @@
+{
+  "tasks": [
+    {
+      "id": 2,
+      "description": "Задача 2",
+      "completed": false,
+      "priority": "High"
+    },
+    {
+      "id": 3,
+      "description": "Задача 3",
+      "completed": false,
+      "priority": "Medium"
+    },
+    {
+      "id": 1,
+      "description": "Задача 1",
+      "completed": false,
+      "priority": "Low"
+    }
+  ]
+}
